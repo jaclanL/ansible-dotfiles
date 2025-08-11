@@ -1,0 +1,57 @@
+" Allow syntax highliting in vim
+syntax on
+
+" Select color scheme
+:color default
+
+" Set a 'leader' key for vim
+let mapleader = ","
+
+" Enable line numbers
+set nu
+
+" Enable row and column indicator
+set ruler
+
+" Set how many spaces a tab is interpreted as
+set tabstop=2 softtabstop=2
+
+" Convert tabs to spaces
+set expandtab
+
+" Vim will try to indent in a smart way
+set smartindent
+
+" Line will, instead of disappear of screen, be placed on a new line instead
+set nowrap
+
+" Only case sensitive in searches when using captial letters
+set smartcase
+
+" Do not create any swap files
+set noswapfile
+
+" Incremental search
+set incsearch
+
+" Show the matching twin bracket
+set showmatch
+
+" Set relative line numbers
+set relativenumber
+
+" Fix problem with backspace not working
+set backspace=2
+
+" Vimdiff settings
+set scrollbind
+
+" Default to not read-only in vimdiff
+set noro
+
+" Enable file explorer in vim as new window in nice size
+nnoremap <leader>pv :wincmd v<bar> :Ex <bar> :vertical resize 30<CR>
+
+" Remap [c to C-J in vimdiff, nowhere else
+nnoremap <expr> <C-j> &diff ? ']c' : '<C-W>j'
+nnoremap <expr> <C-k> &diff ? '[c' : '<C-W>k'

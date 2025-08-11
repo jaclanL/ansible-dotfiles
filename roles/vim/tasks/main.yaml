@@ -1,0 +1,30 @@
+- name: Install vim for Ubuntu
+  become: true
+  ansible.builtin.apt:
+    name: vim
+    state: present
+  when: ansible_distribution == "Ubuntu"
+
+- name: Install vim for MacOS
+  community.general.homebrew:
+    name: vim
+    state: present
+  when: ansible_distribution == "MacOSX"
+
+- name: Check if .vimrc exist
+  ansible.builtin.stat:
+    path: "{{ ansible_env.HOME ~ '/.vimrc' }}"
+  register: vimrc_exist
+
+- name: Backup .vimrc
+  ansible.builtin.copy:
+    src: "{{ ansible_env.HOME ~ '/.vimrc' }}"
+    dest: "{{ ansible_env.HOME ~ '/.vimrc.bak' }}"
+    mode: u=rw,g=r,o=r
+  when: vimrc_exist.stat.exists
+
+- name: Copy .vimrc from template
+  ansible.builtin.template:
+    src: ".vimrc.j2"
+    dest: "{{ ansible_env.HOME ~ '/.vimrc' }}"
+    mode: u=rw,g=r,o=r
