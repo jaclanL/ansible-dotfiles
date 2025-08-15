@@ -4,4 +4,6 @@
     - role: tmux
       tags:
         - tmux
-
+    - role: vim
+      tags:
+        - vim

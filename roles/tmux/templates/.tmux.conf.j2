@@ -1,0 +1,34 @@
+# Remap tmux prefix from "Ctrl + b" to  "Ctrl + a"
+unbind C-b
+set-option -g prefix C-a
+bind-key C-a send-prefix
+# Rebind the panel splitting
+bind h split-window -h
+bind v split-window -v
+unbind '"'
+unbind %
+# Shift + arrows to navigate windows
+bind -n S-Left previous-window
+bind -n S-Right next-window
+# Source the tmux config file
+bind -n M-r source-file $HOME/.tmux.conf
+# Enable panel/window/resize selection with mouse cursor
+set-option -g mouse on
+set-option -g set-clipboard on
+set -g base-index 1
+# Set time for escape to be effective
+set -g escape-time 20
+# Enable usage of Ctrl key to move to next/previous word
+set-window-option -g xterm-keys on
+# Facilitate copy/paste into tmux
+set-window-option -g mode-keys vi
+bind-key -T copy-mode-vi v send-keys -X begin-selection
+bind-key -T copy-mode-vi y send-keys -X copy-selection
+bind-key -T copy-mode-vi r send-keys -X rectangle-toggle
+bind q copy-mode
+bind P paste-buffer
+
+## Design changes ##
+# Status bar
+set -g status-style 'bg=colour248 fg=colour233'
+set -g default-terminal "screen-256color"
