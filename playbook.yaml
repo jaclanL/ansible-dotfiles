@@ -1,6 +1,9 @@
 - name: Setup dev environment
   hosts: local_dev
   roles:
+    - role: git
+      tags:
+        - git
     - role: tmux
       tags:
         - tmux

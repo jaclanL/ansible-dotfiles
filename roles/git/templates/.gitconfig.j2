@@ -1,0 +1,71 @@
+[user]
+        name = {{ git_user }}
+        email = {{ git_email }}
+[core]
+        autocrlf = false
+        editor = vim
+        whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
+[diff]
+        tool = vimdiff
+[difftool]
+        prompt = false
+[merge]
+        tool = vimdiff
+        conflictstyle = diff3
+[grep]
+        lineNumber = true
+[rerere]
+        enabled = true
+[alias]
+        #####################
+        ## Trivial aliases ##
+        #####################
+
+        br = branch
+        ca = commit --amend
+        ch = checkout
+        co = commit
+        cp = cherry-pick
+        re = restore
+        st = status
+        dt = difftool
+        mt = mergetool
+
+        staash = stash --include-untracked
+        k = !git log --
+
+        # Diff after add
+        dc = diff --cached
+
+        # Showing diff with only colors, more clean
+        D = diff --color-words='[^[:space:]]'
+
+        # Diff only filenames
+        dno = "!sh -c \"git diff $1 --name-only\""
+
+        # Grep for branches
+        brgr = !git br -r --list | grep
+
+        #########################
+        ## Non-trivial aliases ##
+        #########################
+
+        # Run given git cmd on file in diff, by number
+        cdf = "!sh -c \"git $1 $(git diff --name-only | sed -n $2p)\""
+
+        # Diff by number
+        df = "!sh -c \"git diff $(git diff --name-only | sed -n $1p)\""
+
+        # Fetch and reset hard
+        hard = "!sh -c \"git fetch origin && git reset --hard origin/$1\""
+
+        # Fetch and rebase interactively
+        base = "!sh -c \"git fetch origin && git rebase -i origin/$1\""
+
+        # Stash, push, pop
+        sp = "!sh -c \"git stash && git push origin HEAD:$1 && git stash pop\""
+
+        hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+
+        # Alternativ to 'hist' but with quite a lot more colors
+        hist2 = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
