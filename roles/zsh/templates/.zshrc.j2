@@ -1,0 +1,115 @@
+####################
+## Prompt configs ##
+####################
+# Load version control information
+autoload -Uz vcs_info
+precmd() { vcs_info }
+# Format the vcs_info_msg_0_ variable
+zstyle ':vcs_info:git:*' formats '%b %a %m%u%c'
+# Set up the prompt (with git branch name)
+setopt PROMPT_SUBST
+# Left-side cmd-line setup (user, folder etc info in color)
+PROMPT='%F{230}%n%f%F{8}@%f%F{230}%m%f %F{230}%B%~%b%f# '
+# Right-side cmd-line setup (including git info)
+RPROMPT='%F{209}${vcs_info_msg_0_}%f'
+
+#####################
+## History configs ##
+#####################
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=50000
+SAVEHIST=10000
+HISTDUP=erase
+setopt histignorealldups
+# Share history between sessions
+setopt SHARE_HISTORY
+# Append history list to the history file, rather than replace it.
+setopt APPEND_HISTORY
+setopt hist_ignore_space
+setopt hist_ignore_all_dups
+setopt hist_ignore_dups
+setopt hist_save_no_dups
+setopt hist_find_no_dups
+
+######################
+## Variable exports ##
+######################
+# Append to PATH
+export PATH=$PATH:"$HOME/.local/bin"
+
+#############
+## Aliases ##
+#############
+alias python='python3'
+alias history='history 1'
+alias gr='grep -winr --color'
+alias cd.="cd .."
+alias cd..="cd ../.."
+alias cd...="cd ../../.."
+alias cd....="cd ../../../.."
+alias kub="kubectl"
+
+####################
+## Config for fzf ##
+####################
+# Setup fzf keybinds
+if command -v fzf &> /dev/null; then
+  source <(fzf --zsh)
+
+  if [ -f "${HOME}/.fzf/.fzfrc" ]; then
+    source "${HOME}/.fzf/.fzfrc"
+  fi
+fi
+
+#################
+## zsh plugins ##
+#################
+if [ -d "$HOME/.zsh/zsh-autosuggestions" ]; then
+  # Enable zsh auto-suggestions
+  source "$HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh"
+fi
+if [ -d "$HOME/.zsh/zsh-syntax-highlighting" ]; then
+  # Enable zsh syntax highlighting
+  source "$HOME/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+fi
+
+# Enable zoxide, if installation exist
+if command -v "zoxide" &> /dev/null; then
+  eval "$(zoxide init zsh)"
+fi
+
+##########################
+## OS dependent configs ##
+##########################
+
+{% if ansible_distribution == "MacOSX" %}
+alias ls='ls -Gal'
+export CLICOLOR=1
+export LSCOLORS=ExGxBxDxCxEgEdxbxgxcxd
+eval "$(/opt/homebrew/bin/brew shellenv)"
+export PATH=$PATH:"/opt/homebrew/bin"
+
+{% elif ansible_distribution == "Ubuntu" %}
+alias ls='ls -al --color=auto'
+eval "$(dircolors $HOME/.dir_colors)"
+bindkey "^[[1;5C" forward-word
+bindkey "^[[1;5D" backward-word
+
+{% endif %}
+
+# Option to append content from local file
+if [[ -a "$HOME/.localrc" ]]; then
+  source "$HOME/.localrc"
+fi
+
+##########################
+## Random bash funtions ##
+##########################
+
+# Create and directly move into new folder
+mkd() { mkdir -p "$@" && cd "$@" || exit; }
+
+# Greps for keyword $2 in file $1
+cgrep() {
+  cat $1 | grep -in $2
+}

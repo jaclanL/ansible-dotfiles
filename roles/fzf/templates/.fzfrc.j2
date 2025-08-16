@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+
+# TODO: consider using e.g. ripgrep with built-in ignores
+# List of path exclude patterns
+EXCLUDES=(
+    -not \( -path "./*.git/*" -prune \) \
+    -not \( -path "./*.vscode*" -prune \) \
+    -not \( -path "./*.pio*" -prune \) \
+    -not \( -path "./*.venv*" -prune \) \
+    -not \( -path "./*node_modules*" -prune \) \
+    -not \( -path "./*__pycache__*" -prune \) \
+    -not \( -path "./*.pytest*" -prune \)
+)
+
+function zd() {
+  # zd fzf utilty for changing directories
+  #
+  # Globals:
+  #   EXCLUDES: List of paths to exclude with find
+  # Returns:
+  #   0 if dir change is successful, non-zero otherwise
+  cd "$(find . \
+    -type d "${EXCLUDES[@]}" \
+    -print | fzf --multi --height=80% --border=sharp \
+    --preview='tree -Ca {}' \
+    --preview-window='45%,border-sharp' \
+    --prompt='dir > ' \
+    --bind='del:execute(rm -ri {+})' \
+    --bind='ctrl-p:toggle-preview' \
+    --header 'CTRL-P to toggle preview')" || return
+}
+
+function zf() {
+  # zf fzf utility for browsing and opening files
+  #
+  # Globals:
+  #   EXCLUDES: List of paths to exclude with find
+  # Arguments:
+  #   $1: editor
+  # Returns:
+  #   0 if browsing and opening of file was successful, non-zero otherwise
+  search_results="$(
+  find . -type f "${EXCLUDES[@]}" \
+    -print | fzf --multi --height=80% --border=sharp \
+    --preview='cat {}' \
+    --preview-window='45%,border-sharp' \
+    --prompt='file > ' \
+    --bind='del:execute(rm -ri {+})' \
+    --bind='ctrl-p:toggle-preview' \
+    --header 'CTRL-P to toggle preview')"
+
+  local editor="${1:-vim}"
+  if [[ -n "${search_results}" ]]; then
+    if [[ "${editor}" == "vim" || "${editor}" == "code" ]]; then
+      "${editor}" "${search_results}"
+    else
+      echo "Editor: ${editor} not supported, please use \`vim\` or \`code\` instead."
+    fi
+  fi
+}
+
+function zg() {
+  # zg fzf utility for selecting files to add to stage
+  #
+  # Returns:
+  #   0 if browsing and git add of file was successful, non-zero otherwise
+  git_files="$(git diff "$@" --name-only | fzf --multi --height=80% --border=sharp \
+  --preview="git diff $* --color=always -- {-1}" \
+  --preview-window='55%,border-sharp' \
+  --prompt='git add > ' \
+  --bind='ctrl-p:toggle-preview' \
+  --header 'CTRL-P to toggle preview')"
+
+  if [[ -n "${git_files}" && -z $@ ]]; then
+    git add "${git_files}"
+  fi
+}
+
+function zh() {
+  # zh fzf utility for browsing cmd line history
+  #
+  # Outputs:
+  #   the selected command
+  # Returns:
+  #   0 if browsing was successful, non-zero otherwise
+  print -z "$(history | cut -c 8- | fzf --height=80% --border=sharp --prompt='run > ')"
+}

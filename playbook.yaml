@@ -1,6 +1,9 @@
 - name: Setup dev environment
   hosts: local_dev
   roles:
+    - role: fzf
+      tags:
+        - fzf
     - role: git
       tags:
         - git
@@ -10,3 +13,6 @@
     - role: vim
       tags:
         - vim
+    - role: zsh
+      tags:
+        - zsh
