@@ -1,0 +1,27 @@
+- name: Update Homebrew
+  community.general.homebrew:
+    update_homebrew: true
+
+- name: Upgrade all Homebrew packages
+  community.general.homebrew:
+    upgrade_all: true
+
+- name: Install programs for MacOS (minimum)
+  loop: "{{ cli_common_minimum + (cli_osx_minimum if cli_osx_minimum is not none else []) }}"
+  community.general.homebrew:
+    name: "{{ item }}"
+    state: present
+
+- name: Install programs for MacOS (additional)
+  loop: "{{ cli_common_additional + (cli_osx_additional if cli_osx_additional is not none else []) }}"
+  community.general.homebrew:
+    name: "{{ item }}"
+    state: present
+  tags: additional
+
+- name: Install programs with brew cask
+  loop: "{{ cli_osx_brew_cask }}"
+  community.general.homebrew_cask:
+    name: "{{ item }}"
+    state: present
+  tags: additional

@@ -1,0 +1,31 @@
+cli_common_minimum:
+  - tree
+  - zoxide
+  - shellcheck
+
+cli_common_additional:
+  - nodejs
+  - npm
+  - sqlite3
+  - podman
+
+cli_osx_minimum:
+  - docker-buildx
+
+cli_osx_additional:
+  - hadolint
+
+cli_osx_brew_cask:
+  - docker
+
+cli_ubuntu_minimum:
+  - curl
+  - python3
+  - python3-pip
+  - python3-venv
+  - xclip
+
+cli_ubuntu_additional:
+  - silversearcher-ag
+  - cmake
+  - default-jdk

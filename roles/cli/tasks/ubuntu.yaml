@@ -1,0 +1,33 @@
+- name: Update APT package cache
+  become: true
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600 # Optional: update only if older than 1 hour
+
+- name: Upgrade all packages to latest version
+  become: true
+  ansible.builtin.apt:
+    upgrade: dist
+
+- name: Install programs for Ubuntu (minimal)
+  become: true
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    update_cache: true
+  loop: "{{ cli_common_minimum + (cli_ubuntu_minimum if cli_ubuntu_minimum is not none else []) }}"
+
+- name: Install programs for Ubuntu (additionals)
+  become: true
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    update_cache: true
+  loop: "{{ cli_common_additional + (cli_ubuntu_additional if cli_ubuntu_additional is not none else []) }}"
+  tags: additional
+
+- name: Remove packages for Ubuntu
+  become: true
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: absent
+  loop:
+    - gradle
