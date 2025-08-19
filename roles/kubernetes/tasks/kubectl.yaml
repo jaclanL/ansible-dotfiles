@@ -1,0 +1,42 @@
+- name: Check for existing kubectl binary
+  ansible.builtin.stat:
+    path: "{{ kubernetes_install_dir }}/kubectl"
+  register: kubectl
+
+- name: Install only if kubectl is not already installed
+  when: not kubectl.stat.exists
+  block:
+    - name: Get the version information of the latest kubectl release
+      ansible.builtin.uri:
+        url: "https://dl.k8s.io/release/stable.txt"
+        return_content: true
+      register: kubctl_get_latest_version
+
+    - name: Ensure the version variable is set
+      ansible.builtin.set_fact:
+        kubectl_version: "{{ kubctl_get_latest_version.content }}"
+
+    - name: Download the kubectl binary
+      ansible.builtin.get_url:
+        url: "{{ item }}/kubectl"
+        checksum: "sha256:{{ item }}/kubectl.sha256"
+        dest: "{{ kubernetes_download_dir }}"
+        mode: "0600"
+      with_items:
+        - "https://dl.k8s.io/release/{{ kubectl_version }}/bin/{{ ansible_system | lower }}/{{ ansible_architecture }}"
+
+    - name: Copy kubectl binary to dest dir
+      become: true
+      ansible.builtin.copy:
+        src: "{{ kubernetes_download_dir }}/{{ item }}"
+        dest: "{{ kubernetes_install_dir }}/{{ item }}"
+        mode: "0755"
+        remote_src: true
+      with_items:
+        - kubectl
+
+  always:
+    - name: Remove kubectl from temporary dir
+      ansible.builtin.file:
+        path: "{{ kubernetes_download_dir }}/kubectl"
+        state: absent

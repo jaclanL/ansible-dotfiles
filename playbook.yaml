@@ -7,6 +7,9 @@
     - role: git
       tags:
         - git
+    - role: kubernetes
+      tags:
+        - kubernetes
     - role: tmux
       tags:
         - tmux

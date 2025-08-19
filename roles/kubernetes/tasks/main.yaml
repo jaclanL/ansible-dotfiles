@@ -1,0 +1,13 @@
+- name: Install and setup kubectl for MacOS
+  ansible.builtin.import_tasks: kubectl.yaml
+  when: ansible_distribution == "MacOSX"
+  tags: additional
+# TODO: Add support for Ubuntu
+
+- name: Install and setup KinD for MacOS
+  vars:
+    kind_version: v0.27.0
+  ansible.builtin.import_tasks: kind.yaml
+  when: ansible_distribution == "MacOSX"
+  tags: additional
+# TODO: Add support for Ubuntu

@@ -1,0 +1,32 @@
+# Install from release binaries, as this is the recommended way
+- name: "Check for existing kind binary"
+  ansible.builtin.stat:
+    path: "{{ kubernetes_install_dir }}/kind"
+  register: kind_check
+
+- name: Install only if kind is not already installed
+  when: not kind_check.stat.exists
+  block:
+    - name: Download the kind binary
+      ansible.builtin.get_url:
+        url: "{{ item }}"
+        checksum: "sha256:{{ item }}.sha256sum"
+        dest: "{{ kubernetes_download_dir }}"
+        mode: "0600"
+      with_items:
+        - "https://kind.sigs.k8s.io/dl/{{ kind_version }}/kind-{{ ansible_system | lower }}-{{ ansible_architecture }}"
+
+    - name: Copy kind binary to dest dir
+      become: true
+      ansible.builtin.copy:
+        src: "{{ kubernetes_download_dir }}/{{ item }}-{{ ansible_system }}-{{ ansible_architecture }}"
+        dest: "{{ kubernetes_install_dir }}/{{ item }}"
+        mode: "0755"
+        remote_src: true
+      with_items:
+        - kind
+  always:
+    - name: Remove kind from temporary dir
+      ansible.builtin.file:
+        path: "{{ kubernetes_download_dir }}/kind-{{ ansible_system | lower }}-{{ ansible_architecture }}"
+        state: absent

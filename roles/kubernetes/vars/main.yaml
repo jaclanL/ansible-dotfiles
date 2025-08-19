@@ -1,0 +1,2 @@
+kubernetes_download_dir: /tmp
+kubernetes_install_dir: /usr/local/bin
