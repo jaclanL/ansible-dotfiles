@@ -10,6 +10,9 @@
     - role: kubernetes
       tags:
         - kubernetes
+    - role: system
+      tags:
+        - system
     - role: tmux
       tags:
         - tmux

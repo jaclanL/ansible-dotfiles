@@ -1,0 +1,19 @@
+- name: Enable tap to click on touchpad
+  community.general.dconf:
+    key: "/org/gnome/desktop/peripherals/touchpad/tap-to-click"
+    value: true
+
+- name: Show battery percentage
+  community.general.dconf:
+    key: "/org/gnome/desktop/interface/show-battery-percentage"
+    value: true
+
+- name: Set keyboard repeat interval
+  community.general.dconf:
+    key: "/org/gnome/desktop/peripherals/keyboard/repeat-interval"
+    value: 30
+
+- name: Set keyboard repeat press deplay
+  community.general.dconf:
+    key: "/org/gnome/desktop/peripherals/keyboard/delay"
+    value: 202

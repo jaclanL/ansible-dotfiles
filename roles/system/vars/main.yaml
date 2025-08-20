@@ -1,0 +1,35 @@
+# Current settings, run: `defaults read <domain>`
+# To search for specific settings, run ´defaults find <keyword>´
+
+# Dock
+system_os_dock_settings:
+  - {
+    # Do not show recent apps
+    domain: "com.apple.dock", key: "show-recents", type: "bool", value: false}
+
+# Finder
+system_os_finder_settings:
+  - {
+    # Show the statusbar
+    domain: "com.apple.finder", key: "ShowStatusBar", type: "bool", value: true}
+  - {
+    # Show all filename extensions
+    domain: "NSGlobalDomain", key: "AppleShowAllExtensions", type: "bool", value: false}
+  - {
+    # Sort folders first
+    domain: "com.apple.finder", key: "_FXSortFoldersFirst", type: "bool", value: true}
+  - {
+    # Show bottom path bar by default
+    domain: "com.apple.finder", key: "ShowPathBar", type: "bool", value: true}
+
+# Trackpad
+system_os_trackpad_settings:
+  - {
+    # Enable natural scroll for mouse and trackpad
+    domain: "NSGlobalDomain", key: "com.apple.swipescrolldirection", type: "bool", value: true}
+  - {
+    # Trackpad force click
+    domain: "NSGlobalDomain", key: "com.apple.trackpad.forceClick", type: "bool", value: true}
+  - {
+    # Set Tracking Speed
+    domain: "NSGlobalDomain", key: "com.apple.trackpad.scaling", type: "float", value: 2}

@@ -1,0 +1,9 @@
+- name: Setup system configurations for MacOS
+  ansible.builtin.include_tasks:
+    file: "macosx.yaml"
+  when: ansible_distribution == "MacOSX"
+
+- name: Setup system configurations for Ubuntu
+  ansible.builtin.include_tasks:
+    file: "ubuntu.yaml"
+  when: ansible_distribution == "Ubuntu"

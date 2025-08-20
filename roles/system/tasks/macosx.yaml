@@ -1,0 +1,25 @@
+- name: "Set MacOS settings: Dock"
+  community.general.osx_defaults:
+    domain: "{{ item['domain'] }}"
+    key: "{{ item['key'] }}"
+    type: "{{ item['type'] }}"
+    value: "{{ item['value'] }}"
+  loop: "{{ system_os_dock_settings }}"
+  notify: Restart Dock
+
+- name: "Set MacOS settings: Finder"
+  community.general.osx_defaults:
+    domain: "{{ item['domain'] }}"
+    key: "{{ item['key'] }}"
+    type: "{{ item['type'] }}"
+    value: "{{ item['value'] }}"
+  loop: "{{ system_os_finder_settings }}"
+  notify: Restart Finder
+
+- name: "Set MacOS settings: Trackpad"
+  community.general.osx_defaults:
+    domain: "{{ item['domain'] }}"
+    key: "{{ item['key'] }}"
+    type: "{{ item['type'] }}"
+    value: "{{ item['value'] }}"
+  loop: "{{ system_os_trackpad_settings }}"
