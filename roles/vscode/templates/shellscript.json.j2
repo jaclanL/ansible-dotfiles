@@ -1,0 +1,31 @@
+{
+	// Place your snippets for shellscript here. Each snippet is defined under a snippet name and has a prefix, body and
+	// description. The prefix is what is used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. Placeholders with the
+	// same ids are connected.
+
+	"Method description": {
+		"prefix": "method",
+		"body": [
+			"# ${1:<method name>} ${2:<method description>}",
+			"#",
+			"# Globals:",
+			"#   None",
+			"# Arguments:",
+			"#   None",
+			"# Outputs:",
+			"#   None",
+			"# Returns:",
+			"#   0 if ${3:<info>} successful, non-zero otherwise",
+			"$4"
+		],
+		"description": "Bash method description Google style"
+	},
+	"Debug print": {
+		"prefix": "decho",
+		"body": [
+			"echo \"${1}: \\${${1}}\""
+		],
+		"description": "Print out variable name and value"
+	},
+}

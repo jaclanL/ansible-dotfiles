@@ -1,0 +1,29 @@
+// Place your key bindings in this file to override the defaults
+[
+    {
+        "key": "f1",
+        "command": "workbench.action.toggleMaximizedPanel"
+    },
+    {
+        "key": "f2",
+        "command": "workbench.action.togglePanel"
+    },
+    {
+        "key": "[IntlBackslash]",
+        "command": "toggleVim"
+    },
+    {
+        "key": "cmd+[Semicolon]",
+        // Open new terminal window
+        "command": "workbench.action.terminal.new",
+        "when": "terminalProcessSupported || terminalWebExtensionContributedProfile"
+    },
+    {
+        "key": "shift+alt+0",
+        "command": "editor.action.insertSnippet",
+        "args": {
+            "langId": "shellscript",
+            "name": "Method description"
+        }
+    },
+]

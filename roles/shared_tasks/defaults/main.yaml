@@ -1,0 +1,2 @@
+shared_tasks_backup: true
+shared_tasks_target_dir: "{{ ansible_env.HOME }}"

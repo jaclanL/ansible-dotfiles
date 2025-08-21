@@ -1,0 +1,15 @@
+vscode_extensions_minimum:
+  - vscodevim.vim
+  - ms-vscode-remote.remote-ssh
+  - ms-python.python
+
+vscode_extensions_additional:
+  - esbenp.prettier-vscode
+  - platformio.platformio-ide
+  - samuelcolvin.jinjahtml
+  - redhat.ansible
+
+vscode_osx_config_files:
+  - {name: settings.json, dir: "{{ ansible_env.HOME }}/Library/Application Support/Code/User"}
+  - {name: keybindings.json, dir: "{{ ansible_env.HOME }}/Library/Application Support/Code/User"}
+  - {name: shellscript.json, dir: "{{ ansible_env.HOME }}/Library/Application Support/Code/User/snippets"}

@@ -1,0 +1,45 @@
+- name: Install vscode for MacOS
+  community.general.homebrew_cask:
+    name: visual-studio-code
+    state: present
+
+- name: Install vscode extensions (minimum)
+  loop: "{{ vscode_extensions_minimum }}"
+  ansible.builtin.command: code --install-extension {{ item }}
+  register: extensions_output
+  changed_when: extensions_output.rc != 0
+
+- name: Install vscode extensions (additional)
+  loop: "{{ vscode_extensions_additional }}"
+  ansible.builtin.command: code --install-extension {{ item }}
+  register: extensions_output
+  changed_when: extensions_output.rc != 0
+  tags: additional
+
+- name: "Update config files"
+  ansible.builtin.include_role:
+    name: shared_tasks
+    tasks_from: copy_from_template
+  vars:
+    shared_tasks_target_dir: "{{ item.dir }}"
+    shared_tasks_file: "{{ item.name }}"
+    shared_tasks_backup: true
+  loop: "{{ vscode_osx_config_files }}"
+
+- name: Make sure pio dir exists
+  ansible.builtin.file:
+    path: "{{ pio_dir }}"
+    state: directory
+    mode: u=rwx,g=rx,o=rx
+  tags: additional
+
+- name: Set platformio symlinks
+  loop:
+    - platformio
+    - pio
+    - piodebuggdb
+  ansible.builtin.file:
+    src: "{{ ansible_env.HOME ~ '/.platformio/penv/bin/' ~ item }}"
+    dest: "{{ pio_dir ~ '/' ~ item }}"
+    state: link
+  tags: additional

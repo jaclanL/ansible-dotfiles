@@ -1,0 +1,7 @@
+- name: Install and setup vscode for MacOS
+  vars:
+    pio_dir: "{{ ansible_env.HOME ~ '/.local/bin' }}"
+  ansible.builtin.import_tasks: macosx.yaml
+  when: ansible_distribution == "MacOSX"
+
+# TODO: Add support for Ubuntu

@@ -1,0 +1,26 @@
+- name: Create dir if not exist
+  ansible.builtin.file:
+    path: "{{ shared_tasks_target_dir }}"
+    state: directory
+    mode: u=rwx,g=rx,o=x
+
+- name: Backup file
+  when: shared_tasks_backup
+  block:
+    - name: Check if {{ shared_tasks_file }} exists
+      ansible.builtin.stat:
+        path: "{{ shared_tasks_target_dir ~ '/' ~ shared_tasks_file }}"
+      register: file_check
+
+    - name: Backup {{ shared_tasks_file }}
+      ansible.builtin.copy:
+        src: "{{ shared_tasks_target_dir ~ '/' ~ shared_tasks_file }}"
+        dest: "{{ shared_tasks_target_dir ~ '/' ~ shared_tasks_file ~ '.bak' }}"
+        mode: u=rw,g=r,o=r
+      when: file_check.stat.exists
+
+- name: Update {{ shared_tasks_file }}
+  ansible.builtin.template:
+    src: "{{ shared_tasks_file ~ '.j2' }}"
+    dest: "{{ shared_tasks_target_dir ~ '/' ~ shared_tasks_file }}"
+    mode: u=rw,g=r,o=r
