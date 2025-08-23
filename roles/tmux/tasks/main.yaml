@@ -11,25 +11,16 @@
     state: present
   when: ansible_distribution == "MacOSX"
 
-- name: Check if .tmux.conf exist
-  ansible.builtin.stat:
-    path: "{{ ansible_env.HOME ~ '/.tmux.conf' }}"
-  register: tmuxconf
+- name: Update config file
+  ansible.builtin.include_role:
+    name: shared_tasks
+    tasks_from: copy_from_template
+  vars:
+    shared_tasks_target_dir: "{{ ansible_env.HOME ~ '/.tmux' }}"
+    shared_tasks_file: .tmux.conf
+    shared_tasks_backup: true
 
-- name: Back up .tmux.conf
-  ansible.builtin.copy:
-    src: "{{ ansible_env.HOME ~ '/.tmux.conf' }}"
-    dest: "{{ ansible_env.HOME ~ '/.tmux.conf.bak' }}"
-    mode: u=rw,g=r,o=r
-  when: tmuxconf.stat.exists
-
-- name: Copy .tmux.conf from templates
-  ansible.builtin.template:
-    src: ".tmux.conf.j2"
-    dest: "{{ ansible_env.HOME ~ '/.tmux.conf' }}"
-    mode: u=rw,g=r,o=r
-
-- name: Copy setup_tmux from files
+- name: Copy setup_session.sh from files
   ansible.builtin.copy:
     src: "setup_session.sh"
     dest: "{{ ansible_env.HOME ~ '/setup_session.sh' }}"

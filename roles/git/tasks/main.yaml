@@ -11,20 +11,11 @@
     state: present
   when: ansible_distribution == "MacOSX"
 
-- name: Check if .gitconfig exist
-  ansible.builtin.stat:
-    path: "{{ ansible_env.HOME ~ '/.gitconfig' }}"
-  register: gitconfig
-
-- name: Back up .gitconfig
-  ansible.builtin.copy:
-    src: "{{ ansible_env.HOME ~ '/.gitconfig' }}"
-    dest: "{{ ansible_env.HOME ~ '/.gitconfig.bak' }}"
-    mode: u=rw,g=r,o=r
-  when: gitconfig.stat.exists
-
-- name: Make sure .gitconfig is up to date
-  ansible.builtin.template:
-    src: ".gitconfig.j2"
-    dest: "{{ ansible_env.HOME ~ '/.gitconfig' }}"
-    mode: u=rw,g=r,o=r
+- name: Update config file
+  ansible.builtin.include_role:
+    name: shared_tasks
+    tasks_from: copy_from_template
+  vars:
+    shared_tasks_target_dir: "{{ ansible_env.HOME }}"
+    shared_tasks_file: .gitconfig
+    shared_tasks_backup: true

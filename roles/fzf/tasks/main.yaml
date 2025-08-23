@@ -11,26 +11,11 @@
     state: present
   when: ansible_distribution == "MacOSX"
 
-- name: Create dir if it does not exist
-  ansible.builtin.file:
-    path: "{{ ansible_env.HOME ~ '/.fzf' }}"
-    state: directory
-    mode: u=rwx,g=rx,o=x
-
-- name: Check if .fzfrc exist
-  ansible.builtin.stat:
-    path: "{{ ansible_env.HOME ~ '/.fzf/.fzfrc' }}"
-  register: fzfrc
-
-- name: Back up .fzfrc
-  ansible.builtin.copy:
-    src: "{{ ansible_env.HOME ~ '/.fzf/.fzfrc'}}"
-    dest: "{{ ansible_env.HOME ~ '/.fzf/.fzfrc.bak'}}"
-    mode: u=rw,g=r,o=r
-  when: fzfrc.stat.exists
-
-- name: Copy .fzfrc from template
-  ansible.builtin.template:
-    src: ".fzfrc.j2"
-    dest: "{{ ansible_env.HOME ~ '/.fzf/.fzfrc'}}"
-    mode: u=rw,g=r,o=r
+- name: Update config file
+  ansible.builtin.include_role:
+    name: shared_tasks
+    tasks_from: copy_from_template
+  vars:
+    shared_tasks_target_dir: "{{ ansible_env.HOME ~ '/.fzf' }}"
+    shared_tasks_file: ".fzfrc"
+    shared_tasks_backup: true

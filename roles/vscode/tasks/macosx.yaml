@@ -16,7 +16,7 @@
   changed_when: extensions_output.rc != 0
   tags: additional
 
-- name: "Update config files"
+- name: Update config file
   ansible.builtin.include_role:
     name: shared_tasks
     tasks_from: copy_from_template

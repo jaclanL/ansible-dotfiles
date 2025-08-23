@@ -11,23 +11,14 @@
     state: present
   when: ansible_distribution == "MacOSX"
 
-- name: Check if .zshrc exist
-  ansible.builtin.stat:
-    path: "{{ ansible_env.HOME ~ '/.zshrc' }}"
-  register: zshrc
-
-- name: Back up .zshrc
-  ansible.builtin.copy:
-    src: "{{ ansible_env.HOME ~ '/.zshrc'}}"
-    dest: "{{ ansible_env.HOME ~ '/.zshrc.bak'}}"
-    mode: u=rw,g=r,o=r
-  when: zshrc.stat.exists
-
-- name: Copy .zshrc from template
-  ansible.builtin.template:
-    src: ".zshrc.j2"
-    dest: "{{ ansible_env.HOME ~ '/.zshrc'}}"
-    mode: u=rw,g=r,o=r
+- name: Update config file
+  ansible.builtin.include_role:
+    name: shared_tasks
+    tasks_from: copy_from_template
+  vars:
+    shared_tasks_target_dir: "{{ ansible_env.HOME }}"
+    shared_tasks_file: .zshrc
+    shared_tasks_backup: true
 
 - name: Copy .dir_colors from template
   ansible.builtin.template:
