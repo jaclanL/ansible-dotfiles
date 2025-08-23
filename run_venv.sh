@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set +x
+set -e
 
 function get_script_dir() {
   cd "$(dirname "$0")" >/dev/null 2>&1 && pwd
