@@ -1,10 +1,10 @@
 - name: Check for existing kubectl binary
   ansible.builtin.stat:
     path: "{{ kubernetes_install_dir }}/kubectl"
-  register: kubectl
+  register: kubectl_check
 
 - name: Install only if kubectl is not already installed
-  when: not kubectl.stat.exists
+  when: not kubectl_check.stat.exists
   block:
     - name: Get the version information of the latest kubectl release
       ansible.builtin.uri:
@@ -23,7 +23,7 @@
         dest: "{{ kubernetes_download_dir }}"
         mode: "0600"
       with_items:
-        - "https://dl.k8s.io/release/{{ kubectl_version }}/bin/{{ ansible_system | lower }}/{{ ansible_architecture }}"
+        - "https://dl.k8s.io/release/{{ kubectl_version }}/bin/{{ kubernetes_system }}/{{ kubernetes_arch }}"
 
     - name: Copy kubectl binary to dest dir
       become: true

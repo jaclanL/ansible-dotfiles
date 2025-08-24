@@ -1,2 +1,9 @@
 kubernetes_download_dir: /tmp
 kubernetes_install_dir: /usr/local/bin
+kubernetes_arch_map:
+  aarch64: arm64
+  arm64: arm64
+  x86_64: amd64
+
+kubernetes_arch: "{{ kubernetes_arch_map[ansible_architecture] }}"
+kubernetes_system: "{{ ansible_system | lower }}"
