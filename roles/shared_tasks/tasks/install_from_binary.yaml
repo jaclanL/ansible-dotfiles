@@ -1,0 +1,31 @@
+- name: Check for existing binary
+  ansible.builtin.stat:
+    path: "{{ shared_tasks_binary_install_dir }}/{{ shared_tasks_binary_name }}"
+  register: binary_check
+
+- name: Install only if binary is not already installed
+  when: not binary_check.stat.exists
+  block:
+
+    - name: Download binary {{ shared_tasks_binary_name }}
+      ansible.builtin.get_url:
+        url: "{{ item }}"
+        checksum: "sha256:{{ item }}.{{ shared_tasks_binary_checksum_extension }}"
+        dest: "{{ shared_tasks_binary_download_dir }}"
+        mode: "0600"
+      with_items:
+        - "{{ shared_tasks_binary_url }}/{{ shared_tasks_binary_download }}"
+
+    - name: Copy binary to dest dir
+      become: true
+      ansible.builtin.copy:
+        src: "{{ shared_tasks_binary_download_dir }}/{{ shared_tasks_binary_download }}"
+        dest: "{{ shared_tasks_binary_install_dir }}/{{ shared_tasks_binary_name }}"
+        mode: "0755"
+        remote_src: true
+
+  always:
+    - name: Remove from temporary dir
+      ansible.builtin.file:
+        path: "{{ shared_tasks_binary_download_dir }}/{{ shared_tasks_binary_download }}"
+        state: absent

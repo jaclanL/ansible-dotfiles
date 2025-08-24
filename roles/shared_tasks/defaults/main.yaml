@@ -1,2 +1,6 @@
 shared_tasks_backup: true
 shared_tasks_target_dir: "{{ ansible_env.HOME }}"
+
+shared_tasks_binary_download_dir: /tmp
+shared_tasks_binary_install_dir: /usr/local/bin
+shared_tasks_binary_checksum_extension: sha256
