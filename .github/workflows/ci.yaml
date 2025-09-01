@@ -21,7 +21,7 @@ jobs:
 
       - name: Run Molecule tests
         run: |
-          source run_venv.sh
+          python3 -m pip install -r requirements.txt
           ansible-galaxy collection install -r requirements.yaml
           molecule test
         env:
