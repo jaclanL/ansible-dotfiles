@@ -1,9 +1,18 @@
 #!/usr/bin/env bash
 
-set -e
-
 function get_script_dir() {
-  cd "$(dirname "$0")" >/dev/null 2>&1 && pwd
+  # Globals:
+  #   $0: path to the script to invoke this script
+  # Outputs:
+  #   script_dir
+  local source="${BASH_SOURCE[0]}"
+  while [ -L "${source}" ]; do
+      local dir
+      dir="$(cd -P "$(dirname -- "${source}")" >/dev/null 2>&1 && pwd)"
+      source="$(readlink -- "${source}")"
+      [[ "${source}" != /* ]] && source="${dir}/${source}"
+  done
+  cd -P "$(dirname -- "${source}")" >/dev/null 2>&1 && pwd
 }
 
 if [[ $0 == "./"* ]]; then
@@ -11,7 +20,7 @@ if [[ $0 == "./"* ]]; then
   exit 1
 fi
 
-repo_root=$(git -C "$(get_script_dir)" rev-parse --show-toplevel)
+repo_root=$(get_script_dir)
 
 echo "Starting venv... @ ${repo_root}/.venv"
 python3 -m venv "${repo_root}/.venv"
