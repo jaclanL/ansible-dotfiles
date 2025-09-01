@@ -3,7 +3,7 @@
 An opinionated set of dotfiles, setup as Ansible roles.
 
 The intent of this repository is to automate the installation of tools/programs and
-setup of configurations (dotfiles, etc.).
+setup of configurations (dotfiles, etc.)
 
 Given this, the development environment will be consistent and setup of new devices
 smooth.
@@ -45,3 +45,7 @@ Additional flags (Ansible builtin)
 To list the available host groups
 
 `ansible-inventory -i inventory --list`
+
+### Molecule
+
+To test the roles, run `molecule test`. For more details see [molecule/README.md](molecule/README.md)
