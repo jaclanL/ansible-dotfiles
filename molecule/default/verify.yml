@@ -1,0 +1,36 @@
+- name: Verify
+  hosts: all
+  tasks:
+    - name: Check required packages are installed
+      ansible.builtin.package_facts:
+        manager: auto
+
+    - name: Verify python3 is installed
+      ansible.builtin.assert:
+        that:
+          - "'python3' in ansible_facts.packages"
+        fail_msg: "python3 package not found"
+
+    - name: Verify tree is installed
+      ansible.builtin.assert:
+        that:
+          - "'tree' in ansible_facts.packages"
+        fail_msg: "tree package not found"
+
+    - name: Verify zoxide is installed
+      ansible.builtin.assert:
+        that:
+          - "'zoxide' in ansible_facts.packages"
+        fail_msg: "zoxide package not found"
+
+    - name: Verify kubectl is installed
+      ansible.builtin.command: kubectl version --client
+      register: kubectl_version
+      failed_when: kubectl_version.rc != 0
+      changed_when: true
+
+    - name: Verify kind is installed
+      ansible.builtin.command: kind --version
+      register: kubectl_version
+      failed_when: kubectl_version.rc != 0
+      changed_when: true

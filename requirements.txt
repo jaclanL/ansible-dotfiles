@@ -1,2 +1,3 @@
 ansible-dev-tools
+molecule-plugins[podman]
 pre-commit

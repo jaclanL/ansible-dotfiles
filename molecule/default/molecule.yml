@@ -1,0 +1,43 @@
+dependency:
+  name: galaxy
+  options:
+    requirements-file: requirements.yml
+driver:
+  name: podman
+platforms:
+  - name: instance
+    image: "geerlingguy/docker-ubuntu2404-ansible:latest"
+    pre_build_image: true
+provisioner:
+  name: ansible
+  env:
+    ANSIBLE_ROLES_PATH: "../../roles"
+lint: set -e ; ansible-lint
+scenario:
+  create_sequence:
+    - dependency
+    - create
+    - prepare
+  converge_sequence:
+    - dependency
+    - create
+    - prepare
+    - converge
+  destroy_sequence:
+    - dependency
+    - cleanup
+    - destroy
+  test_sequence:
+    - dependency
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    # Deviating from the default sequence by disregarding 'idempotence' due to backup of
+    # files behaves non-idempotently
+    - side_effect
+    - verify
+    - cleanup
+    - destroy

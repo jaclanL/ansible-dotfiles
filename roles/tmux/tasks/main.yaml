@@ -16,7 +16,7 @@
     name: shared_tasks
     tasks_from: copy_from_template
   vars:
-    shared_tasks_target_dir: "{{ ansible_env.HOME ~ '/.tmux' }}"
+    shared_tasks_target_dir: "{{ ansible_env.HOME }}"
     shared_tasks_file: .tmux.conf
     shared_tasks_backup: true
 

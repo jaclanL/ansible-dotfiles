@@ -29,4 +29,3 @@ cli_ubuntu_minimum:
 cli_ubuntu_additional:
   - silversearcher-ag
   - cmake
-  - default-jdk

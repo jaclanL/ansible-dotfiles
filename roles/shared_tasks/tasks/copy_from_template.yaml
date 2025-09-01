@@ -7,17 +7,18 @@
 - name: Backup file
   when: shared_tasks_backup
   block:
-    - name: Check if {{ shared_tasks_file }} exists
+    - name: Check if exists {{ shared_tasks_file }}
       ansible.builtin.stat:
         path: "{{ shared_tasks_target_dir ~ '/' ~ shared_tasks_file }}"
-      register: file_check
+      register: shared_tasks_file_check
 
     - name: Backup {{ shared_tasks_file }}
       ansible.builtin.copy:
         src: "{{ shared_tasks_target_dir ~ '/' ~ shared_tasks_file }}"
         dest: "{{ shared_tasks_target_dir ~ '/' ~ shared_tasks_file ~ '.bak' }}"
         mode: u=rw,g=r,o=r
-      when: file_check.stat.exists
+        remote_src: true
+      when: shared_tasks_file_check.stat.exists
 
 - name: Update {{ shared_tasks_file }}
   ansible.builtin.template:

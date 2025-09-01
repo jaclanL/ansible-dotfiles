@@ -1,0 +1,47 @@
+- name: Converge
+  hosts: all
+  gather_facts: true
+  pre_tasks:
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 600
+      when: ansible_facts.os_family == "Debian"
+
+  roles:
+    - role: cli
+      tags:
+        - cli
+
+    - role: git
+      vars:
+        git_user: "test_user"
+        git_email: "test_email"
+      tags:
+        - git
+
+    - role: fzf
+      tags:
+        - fzf
+
+    - role: kubernetes
+      tags:
+        - kubernetes
+
+    - role: tmux
+      tags:
+        - tmux
+
+    - role: vim
+      tags:
+        - vim
+
+    - role: vscode
+      tags:
+        - vscode
+
+    - role: zsh
+      tags:
+        - zsh
+
+  # TODO: add role: system
